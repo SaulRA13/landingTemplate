@@ -1,0 +1,36 @@
+
+{
+  "hero": {
+    "headline": "Create Stunning Landing Pages with AI",
+    "subheadline": "LandingJrz helps you design and deploy beautiful, responsive landing pages in minutes. Let our AI assistant inspire you with new layouts.",
+    "cta": "Get Started",
+    "imageId": "hero"
+  },
+  "features": [
+    {
+      "id": "feature-1",
+      "icon": "Edit",
+      "title": "Easy Content Editing",
+      "description": "Update your landing page content anytime through our simple admin panel.",
+      "imageId": "feature-1"
+    },
+    {
+      "id": "feature-2",
+      "icon": "Bot",
+      "title": "AI-Powered Suggestions",
+      "description": "Stuck in a design rut? Our AI will suggest alternative layouts based on your content.",
+      "imageId": "feature-2"
+    },
+    {
+      "id": "feature-3",
+      "icon": "Smartphone",
+      "title": "Fully Responsive",
+      "description": "Your landing page will look great on all devices, from desktops to mobile phones.",
+      "imageId": "feature-3"
+    }
+  ],
+  "cta": {
+    "headline": "Ready to Build Your Perfect Landing Page?",
+    "cta": "Sign Up Now"
+  }
+}

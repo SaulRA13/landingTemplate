@@ -1,3 +1,46 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "Abstract purple and teal shapes on a light background",
+      "imageUrl": "https://images.unsplash.com/photo-1604011237320-8e0506614fdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxhYnN0cmFjdCUyMHRlY2hub2xvZ3l8ZW58MHx8fHwxNzcwNjExMjMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract technology"
+    },
+    {
+      "id": "feature-1",
+      "description": "A clean desk with a laptop open to a content management system",
+      "imageUrl": "https://images.unsplash.com/photo-1501504905252-473c47e087f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb250ZW50JTIwY3JlYXRpb258ZW58MHx8fHwxNzcwNjcyMTk1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "content creation"
+    },
+    {
+      "id": "feature-2",
+      "description": "An artistic representation of an AI brain with glowing nodes",
+      "imageUrl": "https://images.unsplash.com/photo-1694903110330-cc64b7e1d21d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlfGVufDB8fHx8MTc3MDY0MjIwMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "artificial intelligence"
+    },
+    {
+      "id": "feature-3",
+      "description": "A website shown on a desktop, tablet, and mobile phone screen",
+      "imageUrl": "https://images.unsplash.com/photo-1541462608143-67571c6738dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyZXNwb25zaXZlJTIwZGVzaWdufGVufDB8fHx8MTc3MDY3MjE5NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "responsive design"
+    },
+    {
+      "id": "alt-1",
+      "description": "Geometric patterns in pastel colors",
+      "imageUrl": "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxnZW9tZXRyaWMlMjBwYXR0ZXJufGVufDB8fHx8MTc3MDYxMjA2NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "geometric pattern"
+    },
+    {
+      "id": "alt-2",
+      "description": "A minimalist office space",
+      "imageUrl": "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwb2ZmaWNlfGVufDB8fHx8MTc3MDY3MjE5NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "minimalist office"
+    },
+    {
+      "id": "alt-3",
+      "description": "A close-up of a circuit board",
+      "imageUrl": "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjaXJjdWl0JTIwYm9hcmR8ZW58MHx8fHwxNzcwNjQ1ODUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "circuit board"
+    }
+  ]
 }
