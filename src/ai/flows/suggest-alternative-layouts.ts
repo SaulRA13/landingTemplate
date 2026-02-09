@@ -57,4 +57,17 @@ Images:
 
 Consider the length and type of the text, as well as the type and shape of the images when creating the layout suggestions. Be creative, but also practical.
 
-Respond with an array of layout suggestions, where each suggestion is a short string describing the layout. For example: [\
+Respond with an array of layout suggestions, where each suggestion is a short string describing the layout. For example: ["Hero image on the left, text on the right.", "Three-column feature section with icons.", "Full-width call-to-action with a background image."]`,
+});
+
+const suggestAlternativeLayoutsFlow = ai.defineFlow(
+  {
+    name: 'suggestAlternativeLayoutsFlow',
+    inputSchema: SuggestAlternativeLayoutsInputSchema,
+    outputSchema: SuggestAlternativeLayoutsOutputSchema,
+  },
+  async input => {
+    const {output} = await prompt(input);
+    return output!;
+  }
+);

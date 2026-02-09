@@ -1,4 +1,4 @@
-import { getContent } from '@/lib/content';
+import { getContent } from '@/app/actions';
 import AdminHeader from '@/components/admin/AdminHeader';
 import ContentEditor from '@/components/admin/ContentEditor';
 import LayoutSuggester from '@/components/admin/LayoutSuggester';

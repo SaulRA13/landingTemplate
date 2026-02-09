@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { getContent, getImageById } from '@/lib/content';
+import { getImageById } from '@/lib/content';
+import { getContent } from '@/app/actions';
 import Header from '@/components/landing/Header';
 import Hero from '@/components/landing/Hero';
 import Features from '@/components/landing/Features';

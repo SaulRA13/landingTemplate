@@ -4,8 +4,37 @@ import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { getContent, saveContent, getImageById, Content, placeholderImages } from '@/lib/content';
+import { getImageById, type Content, placeholderImages } from '@/lib/content';
 import { suggestAlternativeLayouts } from '@/ai/flows/suggest-alternative-layouts';
+import fs from 'fs/promises';
+import path from 'path';
+
+const contentFilePath = path.join(process.cwd(), 'src', 'data', 'content.json');
+
+export async function getContent(): Promise<Content> {
+  try {
+    const content = await fs.readFile(contentFilePath, 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error("Error reading content file:", error);
+    // Return a default structure in case of error
+    return {
+      hero: { headline: "", subheadline: "", cta: "", imageId: "" },
+      features: [],
+      cta: { headline: "", cta: "" }
+    };
+  }
+}
+
+async function saveContent(newContent: Content): Promise<void> {
+  try {
+    await fs.writeFile(contentFilePath, JSON.stringify(newContent, null, 2), 'utf-8');
+  } catch (error) {
+    console.error("Error saving content file:", error);
+    throw new Error("Could not save content.");
+  }
+}
+
 
 const loginSchema = z.object({
   username: z.string(),
