@@ -3,6 +3,7 @@ import { logout } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/Logo';
 import { LogOut, Home } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function AdminHeader() {
   return (
@@ -12,6 +13,7 @@ export default function AdminHeader() {
           <Logo />
         </Link>
         <div className="flex items-center gap-2">
+           <ThemeToggle />
            <Button asChild variant="outline" size="sm">
             <Link href="/" target="_blank">
               <Home className="mr-2 h-4 w-4" />
