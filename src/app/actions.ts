@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { getImageById, type Content, placeholderImages } from '@/lib/content';
+import type { Content } from '@/lib/content';
 import { suggestAlternativeLayouts } from '@/ai/flows/suggest-alternative-layouts';
 import fs from 'fs/promises';
 import path from 'path';
@@ -55,8 +55,10 @@ export async function login(prevState: LoginState, formData: FormData): Promise<
 
   const { username, password } = parsed.data;
 
-  // IMPORTANT: In a real application, use a secure way to store and verify credentials.
-  if (username === 'admin' && password === 'password') {
+  const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'password';
+
+  if (username === adminUsername && password === adminPassword) {
     cookies().set('auth_token', 'user-is-authenticated', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -113,6 +115,7 @@ export async function getLayoutSuggestions() {
   }
 
   const content = await getContent();
+  const { getImageById } = await import('@/lib/content');
 
   const texts = [
     content.hero.headline,

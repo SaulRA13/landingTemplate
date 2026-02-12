@@ -38,9 +38,8 @@ export function LoginForm() {
           id="username"
           name="username"
           type="text"
-          placeholder="admin"
+          placeholder="Enter your username"
           required
-          defaultValue="admin"
         />
       </div>
       <div className="space-y-2">
@@ -49,8 +48,8 @@ export function LoginForm() {
           id="password"
           name="password"
           type="password"
+          placeholder="Enter your password"
           required
-          defaultValue="password"
         />
       </div>
 

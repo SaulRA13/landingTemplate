@@ -15,9 +15,6 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <LoginForm />
-          <p className="mt-4 px-2 text-center text-sm text-muted-foreground">
-            Use <span className="font-mono font-semibold">admin</span> / <span className="font-mono font-semibold">password</span> to log in.
-          </p>
         </CardContent>
       </Card>
     </main>
