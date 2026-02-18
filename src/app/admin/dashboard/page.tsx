@@ -1,7 +1,6 @@
 import { getContent } from '@/app/actions';
 import AdminHeader from '@/components/admin/AdminHeader';
 import ContentEditor from '@/components/admin/ContentEditor';
-import LayoutSuggester from '@/components/admin/LayoutSuggester';
 
 export default async function AdminDashboardPage() {
   const content = await getContent();
@@ -11,7 +10,6 @@ export default async function AdminDashboardPage() {
       <AdminHeader />
       <main className="flex-1 p-4 sm:p-6 md:p-8">
         <div className="max-w-4xl mx-auto grid gap-8">
-            <LayoutSuggester />
             <ContentEditor initialContent={content} />
         </div>
       </main>

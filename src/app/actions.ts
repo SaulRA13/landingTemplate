@@ -5,36 +5,27 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import type { Content } from '@/lib/content';
-import { suggestAlternativeLayouts } from '@/ai/flows/suggest-alternative-layouts';
-import fs from 'fs/promises';
-import path from 'path';
 
-const contentFilePath = path.join(process.cwd(), 'src', 'data', 'content.json');
+const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
 export async function getContent(): Promise<Content> {
   try {
-    const content = await fs.readFile(contentFilePath, 'utf-8');
-    return JSON.parse(content);
+    const response = await fetch(`${API_BASE_URL}/api/content`, {
+      cache: 'no-store', // Ensure we always get fresh content from the backend
+    });
+
+    if (!response.ok) {
+      console.error("Error fetching content:", response.status, response.statusText);
+      return { title: "Error Loading Content", mainText: "Could not load content from the backend API. Please ensure the backend is running." };
+    }
+    
+    return await response.json();
+
   } catch (error) {
-    console.error("Error reading content file:", error);
-    // Return a default structure in case of error
-    return {
-      hero: { headline: "", subheadline: "", cta: "", imageId: "" },
-      features: [],
-      cta: { headline: "", cta: "" }
-    };
+    console.error("Error connecting to backend:", error);
+    return { title: "Connection Error", mainText: "Could not connect to the backend. Please ensure it's running on the correct port." };
   }
 }
-
-async function saveContent(newContent: Content): Promise<void> {
-  try {
-    await fs.writeFile(contentFilePath, JSON.stringify(newContent, null, 2), 'utf-8');
-  } catch (error) {
-    console.error("Error saving content file:", error);
-    throw new Error("Could not save content.");
-  }
-}
-
 
 const loginSchema = z.object({
   username: z.string(),
@@ -52,22 +43,35 @@ export async function login(prevState: LoginState, formData: FormData): Promise<
   if (!parsed.success) {
     return { error: 'Invalid form data.' };
   }
-
-  const { username, password } = parsed.data;
-
-  const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'password';
-
-  if (username === adminUsername && password === adminPassword) {
-    cookies().set('auth_token', 'user-is-authenticated', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24, // 1 day
-      path: '/',
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(parsed.data),
     });
-    return { success: true };
-  } else {
-    return { error: 'Invalid username or password.' };
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Invalid username or password.' }));
+        return { error: errorData.message || 'Invalid username or password.' };
+    }
+
+    const { token } = await response.json();
+
+    if (token) {
+        cookies().set('auth_token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 60 * 60 * 24, // 1 day
+          path: '/',
+        });
+        return { success: true };
+    } else {
+        return { error: 'Login failed: no token received from backend.' };
+    }
+  } catch(e) {
+      console.error(e);
+      return { error: 'Could not connect to the authentication service.' };
   }
 }
 
@@ -77,71 +81,34 @@ export async function logout() {
 }
 
 export async function updateContent(content: Content) {
-  const cookieStore = cookies();
-  if (!cookieStore.get('auth_token')) {
-    return { success: false, error: 'Unauthorized' };
+  const token = cookies().get('auth_token')?.value;
+
+  if (!token) {
+    return { success: false, error: 'Unauthorized. Please log in again.' };
   }
   
   try {
-    await saveContent(content);
+    const response = await fetch(`${API_BASE_URL}/api/content`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(content),
+    });
+
+    if (!response.ok) {
+        // Try to parse error from backend, otherwise provide a generic message
+        const errorText = await response.text();
+        console.error('Failed to update content:', errorText);
+        return { success: false, error: `Failed to update content. Server responded with: ${response.status}` };
+    }
+    
     revalidatePath('/');
     revalidatePath('/admin/dashboard');
     return { success: true };
   } catch (e) {
-    return { success: false, error: 'Failed to save content.' };
-  }
-}
-
-async function imageUrlToBase64(imageUrl: string) {
-  try {
-    const response = await fetch(imageUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch image: ${response.statusText}`);
-    }
-    const buffer = await response.arrayBuffer();
-    const base64 = Buffer.from(buffer).toString('base64');
-    const mime = response.headers.get('content-type') || 'image/jpeg';
-    return `data:${mime};base64,${base64}`;
-  } catch (error) {
-    console.error(`Error converting image URL to Base64: ${imageUrl}`, error);
-    return null;
-  }
-}
-
-export async function getLayoutSuggestions() {
-  const cookieStore = cookies();
-  if (!cookieStore.get('auth_token')) {
-    throw new Error('Unauthorized');
-  }
-
-  const content = await getContent();
-  const { getImageById } = await import('@/lib/content');
-
-  const texts = [
-    content.hero.headline,
-    content.hero.subheadline,
-    ...content.features.map(f => f.title),
-    ...content.features.map(f => f.description),
-    content.cta.headline,
-  ].filter(Boolean);
-  
-  const allImageIds = [content.hero.imageId, ...content.features.map(f => f.imageId)];
-  const imageUrls = allImageIds
-    .map(id => getImageById(id)?.imageUrl)
-    .filter((url): url is string => !!url);
-
-  const imagePromises = imageUrls.map(imageUrlToBase64);
-  const images = (await Promise.all(imagePromises)).filter((img): img is string => !!img);
-
-  if (texts.length === 0 || images.length === 0) {
-    return { layoutSuggestions: [] };
-  }
-
-  try {
-    const result = await suggestAlternativeLayouts({ texts, images });
-    return result;
-  } catch (error) {
-    console.error('Error getting layout suggestions:', error);
-    return { layoutSuggestions: ['Error generating suggestions. Please try again.'] };
+    console.error(e);
+    return { success: false, error: 'Failed to save content due to a network error.' };
   }
 }
