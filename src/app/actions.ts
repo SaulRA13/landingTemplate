@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import type { Content } from '@/lib/content';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = process.env.API_BASE_URL || 'http://cloudlandingapi:8080';
 
 export async function getContent(): Promise<Content> {
   try {
@@ -23,7 +23,7 @@ export async function getContent(): Promise<Content> {
 
   } catch (error) {
     console.error("Error connecting to backend:", error);
-    return { title: "Connection Error", mainText: "Could not connect to the backend. Please ensure it's running on the correct port." };
+    return { title: "Connection Error", mainText: "Could not connect to the backend. Please ensure it's running and the API_BASE_URL is correct." };
   }
 }
 
