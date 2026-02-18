@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { getContent } from '@/app/actions';
 import AdminHeader from '@/components/admin/AdminHeader';
 import ContentEditor from '@/components/admin/ContentEditor';
+
+export const metadata: Metadata = {
+  title: 'Administrador',
+  description: 'Panel principal del administrador',
+};
 
 export default async function AdminDashboardPage() {
   const content = await getContent();

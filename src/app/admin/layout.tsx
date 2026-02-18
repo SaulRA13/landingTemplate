@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+
+export const metadata: Metadata = {
+  title: 'Admin Dashboard',
+  description: 'Panel de administracion',
+};
 
 export default async function AdminLayout({
   children,
