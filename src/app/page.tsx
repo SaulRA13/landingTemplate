@@ -13,6 +13,8 @@ export default async function Home() {
         <Hero 
           headline={content.title} 
           subheadline={content.mainText}
+          description={content.description}
+          image={content.image}
         />
       </main>
       <Footer />

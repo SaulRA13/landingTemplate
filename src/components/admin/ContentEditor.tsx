@@ -25,6 +25,8 @@ import { Save } from 'lucide-react';
 const contentSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   mainText: z.string().min(1, 'Main text is required'),
+  description: z.string().optional(),
+  image: z.string().optional(),
 });
 
 type ContentEditorProps = {
@@ -40,6 +42,8 @@ export default function ContentEditor({ initialContent }: ContentEditorProps) {
     defaultValues: {
         title: initialContent.title || '',
         mainText: initialContent.mainText || '',
+        description: initialContent.description || '',
+        image: initialContent.image || '',
     },
   });
 
@@ -78,8 +82,18 @@ export default function ContentEditor({ initialContent }: ContentEditorProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="mainText">Main Text</Label>
-              <Textarea id="mainText" {...form.register('mainText')} rows={8} />
+              <Textarea id="mainText" {...form.register('mainText')} rows={6} />
                {form.formState.errors.mainText && <p className="text-sm text-destructive">{form.formState.errors.mainText.message}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" {...form.register('description')} rows={4} placeholder="Additional description..." />
+               {form.formState.errors.description && <p className="text-sm text-destructive">{form.formState.errors.description.message}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="image">Image URL</Label>
+              <Input id="image" {...form.register('image')} placeholder="https://example.com/image.jpg" />
+               {form.formState.errors.image && <p className="text-sm text-destructive">{form.formState.errors.image.message}</p>}
             </div>
         </CardContent>
         <CardFooter className="border-t px-6 py-4">

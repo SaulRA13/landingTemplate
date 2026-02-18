@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import type { Content } from '@/lib/content';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://cloudlandingapi:8080';
+const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
 
 export async function getContent(): Promise<Content> {
   try {
