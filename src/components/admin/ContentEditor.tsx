@@ -1,10 +1,10 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { updateContent } from '@/app/actions';
+import { updateContent } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,7 +28,6 @@ const sectionSchema = z.object({
   image: z.string().optional(),
 });
 
-// This schema now matches the simplified content structure from your backend
 const contentSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   mainText: z.string().min(1, 'Main text is required'),
@@ -74,19 +73,19 @@ function getNumberedSections(content: Content): ContentSection[] {
 }
 
 export default function ContentEditor({ initialContent }: ContentEditorProps) {
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<Content>({
     resolver: zodResolver(contentSchema),
     defaultValues: {
-        title: initialContent.title || '',
-        mainText: initialContent.mainText || '',
-        description: initialContent.description || '',
-        image: initialContent.image || '',
-        sections: Array.isArray(initialContent.sections) && initialContent.sections.length > 0
-          ? initialContent.sections
-          : getNumberedSections(initialContent),
+      title: initialContent.title || '',
+      mainText: initialContent.mainText || '',
+      description: initialContent.description || '',
+      image: initialContent.image || '',
+      sections: Array.isArray(initialContent.sections) && initialContent.sections.length > 0
+        ? initialContent.sections
+        : getNumberedSections(initialContent),
     },
   });
 
@@ -95,22 +94,23 @@ export default function ContentEditor({ initialContent }: ContentEditorProps) {
     name: 'sections',
   });
 
-  const onSubmit = form.handleSubmit((data) => {
-    startTransition(async () => {
-      const result = await updateContent(data);
-      if (result.success) {
-        toast({
-          title: 'Success!',
-          description: 'Landing page content has been updated.',
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: result.error || 'Something went wrong.',
-        });
-      }
-    });
+  const onSubmit = form.handleSubmit(async (data) => {
+    setIsPending(true);
+    try {
+      await updateContent(data);
+      toast({
+        title: 'Success!',
+        description: 'Landing page content has been updated.',
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Something went wrong.',
+      });
+    } finally {
+      setIsPending(false);
+    }
   });
 
   return (

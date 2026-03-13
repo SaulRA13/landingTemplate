@@ -1,67 +1,75 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/app/actions';
+import { login } from '@/lib/api';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, LogIn } from 'lucide-react';
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? 'Signing in...' : 'Sign In'}
-      {!pending && <LogIn className="ml-2 h-4 w-4" />}
-    </Button>
-  );
-}
-
 export function LoginForm() {
-  const [state, formAction] = useFormState(login, { success: false });
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    if (state?.success) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      await login(username, password);
       router.push('/admin/dashboard');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+    } finally {
+      setIsLoading(false);
     }
-  }, [state, router]);
+  };
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="username">Username</Label>
         <Input
           id="username"
-          name="username"
           type="text"
           placeholder="Enter your username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
+          disabled={isLoading}
         />
       </div>
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
         <Input
           id="password"
-          name="password"
           type="password"
           placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
+          disabled={isLoading}
         />
       </div>
 
-      {state?.error && (
+      {error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Login Failed</AlertTitle>
-          <AlertDescription>{state.error}</AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <SubmitButton />
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? 'Signing in...' : 'Sign In'}
+        {!isLoading && <LogIn className="ml-2 h-4 w-4" />}
+      </Button>
     </form>
   );
 }
