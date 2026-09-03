@@ -1,0 +1,26 @@
+[
+  {
+    "id": "comer",
+    "label": "Salir a comer",
+    "icon": "Utensils",
+    "subcategories": ["Sushi", "Italiana", "Mexicana", "Mariscos", "Postres", "Sorpréndeme"]
+  },
+  {
+    "id": "pelicula",
+    "label": "Ver una película",
+    "icon": "Film",
+    "subcategories": ["Comedia", "Terror", "Romance", "Acción", "Animada"]
+  },
+  {
+    "id": "pasear",
+    "label": "Salir a pasear",
+    "icon": "TreePine",
+    "subcategories": ["Parque", "Centro comercial", "Playa", "Caminata"]
+  },
+  {
+    "id": "sorpresa",
+    "label": "Sorpréndeme tú",
+    "icon": "Gift",
+    "subcategories": []
+  }
+]

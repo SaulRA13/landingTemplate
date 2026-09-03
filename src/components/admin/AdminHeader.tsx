@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { logout } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/Logo';
-import { LogOut, Home } from 'lucide-react';
+import { LogOut, Home, CalendarHeart } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function AdminHeader() {
@@ -22,12 +22,18 @@ export default function AdminHeader() {
         <Link href="/admin/dashboard">
           <Logo />
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
           <Button asChild variant="outline" size="sm">
+            <Link href="/admin/citas">
+              <CalendarHeart className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Citas</span>
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
             <Link href="/" target="_blank">
-              <Home className="mr-2 h-4 w-4" />
-              View Site
+              <Home className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">View Site</span>
             </Link>
           </Button>
           <Button
@@ -35,8 +41,8 @@ export default function AdminHeader() {
             variant="destructive"
             size="sm"
           >
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
+            <LogOut className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Logout</span>
           </Button>
         </div>
       </div>
