@@ -145,7 +145,7 @@ export default function AskOutForm() {
                   'h-11 px-8 text-sm cursor-pointer select-none'
                 )}
               >
-                No 🥲
+                No
               </button>
             </div>
           </div>
@@ -165,14 +165,14 @@ export default function AskOutForm() {
         {step === 'reaction' && (
           <div className="space-y-4 text-center">
             <p className="text-lg font-semibold">YA SABÍA QUE SÍ QUERÍAS CHIQUITA 😏</p>
-            <p className="text-sm text-muted-foreground">Nomás no te hagas del rogar 😅</p>
+            <p className="text-sm text-muted-foreground">Nomás no te hagas del rogar</p>
             <Button onClick={() => goTo('activity')}>ok, ok →</Button>
           </div>
         )}
 
         {step === 'activity' && (
           <div className="space-y-4">
-            <p className="text-center text-sm text-muted-foreground">¿Hay algo que quieras hacer? tú date bby ✨</p>
+            <p className="text-center text-sm text-muted-foreground">¿Hay algo que quieras hacer? tú date bby</p>
             <div className="grid grid-cols-2 gap-3">
               {activities.map((item) => {
                 const Icon = icons[item.icon] ?? Heart;
@@ -219,7 +219,7 @@ export default function AskOutForm() {
 
         {step === 'schedule' && activity && (
           <div className="space-y-4">
-            <p className="text-sm font-medium text-center">Entonces... ¿cuándo estás libre? 📅</p>
+            <p className="text-sm font-medium text-center">Entonces... ¿cuándo estás libre?</p>
             <div className="rounded-lg bg-muted/50 p-3 text-sm">
               <span className="font-medium">{activity.label}</span>
               {subcategory && <span className="text-muted-foreground"> · {subcategory}</span>}
@@ -281,7 +281,7 @@ export default function AskOutForm() {
             <p className="text-lg font-semibold">Ya te quiero ver chiquibeibe.</p>
             <p className="text-sm">
               Te espero lista el: <span className="font-medium">{formatDay(day)}</span>,{' '}
-              <span className="font-medium">{formatTime(pickupTime)}</span>, yo paso por ti 🚗
+              <span className="font-medium">{formatTime(pickupTime)}</span>, yo paso por ti
             </p>
             <p className="text-xs text-muted-foreground">
               P.D. Alch sí le copié al del reel pero no me arrepiento.
@@ -291,7 +291,7 @@ export default function AskOutForm() {
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Volver
               </Button>
-              <Button onClick={() => goTo('payment')}>ok, acepto 🤝</Button>
+              <Button onClick={() => goTo('payment')}>ok, acepto</Button>
             </div>
           </div>
         )}
@@ -312,7 +312,7 @@ export default function AskOutForm() {
               <p className="text-xs text-muted-foreground">cuota única • no reembolsable • totalmente vale la pena</p>
             </div>
             <p className="text-xs text-muted-foreground">
-              También se acepta pago con tus dulces o arrimones 😏
+              También se acepta pago con tus dulces o arrimones
             </p>
 
             {error && (
@@ -328,7 +328,7 @@ export default function AskOutForm() {
                   Procesando pago...
                 </>
               ) : (
-                'pagar $499 y confirmar 🤝'
+                'pagar $499 y confirmar'
               )}
             </Button>
             <Button type="button" variant="ghost" size="sm" onClick={goBack} disabled={isSubmitting}>
