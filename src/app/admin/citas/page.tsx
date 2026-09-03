@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { DateRequest } from '@/lib/dates';
+import { formatDay, formatTime, type DateRequest } from '@/lib/dates';
 
 const STATUS_FLOW: Record<string, { next: string; label: string; icon: typeof CheckCircle2 } | undefined> = {
   pending: { next: 'confirmed', label: 'Confirmar', icon: CheckCircle2 },
@@ -134,7 +134,10 @@ export default function CitasPage() {
                     <CardContent className="space-y-3 pt-0">
                       <div className="flex items-center gap-1.5 text-sm">
                         <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
-                        <span>Paso por ella a las {request.pickupTime}</span>
+                        <span>
+                          Paso por ella{request.day && ` el ${formatDay(request.day)}`} a las{' '}
+                          {formatTime(request.pickupTime)}
+                        </span>
                       </div>
                       {request.notes && (
                         <p className="text-sm text-muted-foreground">"{request.notes}"</p>
