@@ -145,7 +145,7 @@ export default function AskOutForm() {
                   'h-11 px-8 text-sm cursor-pointer select-none'
                 )}
               >
-                No
+                No :c
               </button>
             </div>
           </div>
