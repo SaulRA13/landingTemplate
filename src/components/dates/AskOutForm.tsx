@@ -6,6 +6,8 @@ import {
   Film,
   TreePine,
   Gift,
+  Beer,
+  Sofa,
   Heart,
   ArrowLeft,
   PartyPopper,
@@ -29,10 +31,16 @@ const icons: Record<string, React.ComponentType<{ className?: string }>> = {
   Film,
   TreePine,
   Gift,
+  Beer,
+  Sofa,
 };
+
+// Escalating memes shown on the 1st and 2nd "No" — a 3rd "No" is just ignored (see chooseNo).
+const NO_REACTION_IMAGES = ['/images/no-1-nojao.jpg', '/images/no-2-cejas.jpg'];
 
 type Step =
   | 'intro'
+  | 'noReaction'
   | 'reaction'
   | 'activity'
   | 'subcategory'
@@ -49,7 +57,7 @@ export default function AskOutForm() {
   const [day, setDay] = useState('');
   const [pickupTime, setPickupTime] = useState('');
   const [notes, setNotes] = useState('');
-  const [noOffset, setNoOffset] = useState({ x: 0, y: 0 });
+  const [noClickCount, setNoClickCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -67,15 +75,16 @@ export default function AskOutForm() {
     });
   };
 
-  // The classic "you can't say no" gag: the button just runs away from the cursor/finger.
-  // It's never wired to any action, so even a lucky tap does nothing.
-  const dodgeNo = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    const range = 70;
-    setNoOffset({
-      x: (Math.random() - 0.5) * range * 2,
-      y: (Math.random() - 0.5) * range * 2,
-    });
+  // "No" isn't really an option: the first two times, it just guilt-trips with a meme
+  // and sends her back to try again. The third time, it's simply ignored as if she said yes.
+  const chooseNo = () => {
+    const nextCount = noClickCount + 1;
+    setNoClickCount(nextCount);
+    if (nextCount >= NO_REACTION_IMAGES.length + 1) {
+      goTo('reaction');
+    } else {
+      goTo('noReaction');
+    }
   };
 
   const chooseActivity = (chosen: Activity) => {
@@ -130,12 +139,7 @@ export default function AskOutForm() {
               </Button>
               <button
                 type="button"
-                onMouseEnter={dodgeNo}
-                onPointerDown={dodgeNo}
-                style={{
-                  transform: `translate(${noOffset.x}px, ${noOffset.y}px)`,
-                  transition: 'transform 0.15s ease',
-                }}
+                onClick={chooseNo}
                 className={cn(
                   badgeVariants({ variant: 'outline' }),
                   'h-11 px-8 text-sm cursor-pointer select-none'
@@ -147,17 +151,28 @@ export default function AskOutForm() {
           </div>
         )}
 
+        {step === 'noReaction' && (
+          <div className="space-y-4 text-center">
+            <img
+              src={NO_REACTION_IMAGES[Math.min(noClickCount, NO_REACTION_IMAGES.length) - 1]}
+              alt="reacción"
+              className="mx-auto max-h-64 rounded-lg object-contain"
+            />
+            <Button onClick={() => goTo('intro')}>Apoco si? →</Button>
+          </div>
+        )}
+
         {step === 'reaction' && (
           <div className="space-y-4 text-center">
-            <p className="text-lg font-semibold">¿ESPERA... ENSERIO DIJISTE QUE SÍ?? 😭</p>
-            <p className="text-sm text-muted-foreground">Estaba tan listo para que dijeras que no 😅</p>
+            <p className="text-lg font-semibold">YA SABÍA QUE SÍ QUERÍAS CHIQUITA 😏</p>
+            <p className="text-sm text-muted-foreground">Nomás no te hagas del rogar 😅</p>
             <Button onClick={() => goTo('activity')}>ok, ok →</Button>
           </div>
         )}
 
         {step === 'activity' && (
           <div className="space-y-4">
-            <p className="text-center text-sm text-muted-foreground">¿Qué se te antoja? elige tu vibra ✨</p>
+            <p className="text-center text-sm text-muted-foreground">¿Hay algo que quieras hacer? tú date bby ✨</p>
             <div className="grid grid-cols-2 gap-3">
               {activities.map((item) => {
                 const Icon = icons[item.icon] ?? Heart;
@@ -263,13 +278,13 @@ export default function AskOutForm() {
         {step === 'transition' && activity && (
           <div className="space-y-4 text-center">
             <Car className="mx-auto h-8 w-8 text-primary" />
-            <p className="text-lg font-semibold">Qué bueno que no dijiste que no.</p>
+            <p className="text-lg font-semibold">Ya te quiero ver chiquibeibe.</p>
             <p className="text-sm">
-              Está lista el <span className="font-medium">{formatDay(day)}</span> a las{' '}
-              <span className="font-medium">{formatTime(pickupTime)}</span>, paso por ti 🚗
+              Te espero lista el: <span className="font-medium">{formatDay(day)}</span>,{' '}
+              <span className="font-medium">{formatTime(pickupTime)}</span>, yo paso por ti 🚗
             </p>
             <p className="text-xs text-muted-foreground">
-              P.D. la gente normal solo manda un mensaje. Te hice esta página como sorpresa. No es gran cosa 😌
+              P.D. Alch sí le copié al del reel pero no me arrepiento.
             </p>
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-center">
               <Button type="button" variant="ghost" size="sm" onClick={goBack}>
@@ -296,6 +311,9 @@ export default function AskOutForm() {
               </div>
               <p className="text-xs text-muted-foreground">cuota única • no reembolsable • totalmente vale la pena</p>
             </div>
+            <p className="text-xs text-muted-foreground">
+              También se acepta pago con tus dulces o arrimones 😏
+            </p>
 
             {error && (
               <Alert variant="destructive">
